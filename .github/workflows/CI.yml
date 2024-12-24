@@ -29,7 +29,7 @@ jobs:
           - build_variant: "mt7621"
             targets: "JDCLOUD-RE-CP-02"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
       - name: Prepare environment
         run: |
           sudo apt update
@@ -41,7 +41,7 @@ jobs:
           cd toolchain-mipsel
           sh dl_toolchain.sh
       - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+        uses: mxschmitt/action-tmate@master
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled == 'yes' }}
         with:
           limit-access-to-actor: true
@@ -62,13 +62,13 @@ jobs:
           echo "image_name=${image_name}" >> $GITHUB_ENV
       - name: Upload images to Artifact
         if: ${{ github.event_name != 'release' && success() }}
-        uses: actions/upload-artifact@v2.2.1
+        uses: actions/upload-artifact@master
         with:
           name: ${{ env.image_name }}
           path: ${{ env.images_dir }}/*.7z
       - name: Upload images to Releases
         if: ${{ github.event_name == 'release' && success() }}
-        uses: svenstaro/upload-release-action@2.2.0
+        uses: svenstaro/upload-release-action@master
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ${{ env.images_dir }}/*.trx
